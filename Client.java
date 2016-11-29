@@ -12,8 +12,8 @@ public class Client {
 		// main
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// declare variables
-		String site="";
-		int PortNumber=40450;	
+		String site="", num="";
+		int PortNumber=0;	
 		Client client = new Client();
 		
 		// ability to take in input from the user
@@ -35,14 +35,22 @@ public class Client {
 		System.out.print(". ");
 	}
 		
+		
 		// display header of browser
 		System.out.println("\n");
 		System.out.println("============================================");
 		System.out.println("           BROWSER Version 706");
 		System.out.println("============================================ \n");
-		System.out.println("Please Insert The Web Address You Wish to Visit");
-	
+		System.out.println("Please Insert Your Port Address (Local server Port 40450)");
 		
+		//take in portnumber from user
+		num = br.readLine();
+		
+		// convert string to integer
+		PortNumber = Integer.parseInt(num);
+		
+		System.out.println("Please Insert The Web Address You Wish to Visit");
+			
 		//Take in website from user
 		site = br.readLine();
 		
@@ -50,7 +58,7 @@ public class Client {
 		System.out.println("You entered "+ site);
 		
 		// call the server
-		client.server(site,80);
+		client.server(site,PortNumber);
 		
 		
 	/*	
