@@ -13,7 +13,9 @@ public class Client {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// declare variables
 		String site="";
-		int PortNumber=40450;
+		int PortNumber=40450;	
+		Client client = new Client();
+		
 		// ability to take in input from the user
 		BufferedReader br= new BufferedReader (new InputStreamReader(System.in));
 		
@@ -32,10 +34,7 @@ public class Client {
 		Thread.sleep(1000);
 		System.out.print(". ");
 	}
-		// create the client (Prof already gave us our PortNumber which is) 40450
-		Socket MyClient;
-	    MyClient = new Socket("Machine name", PortNumber);
-	    
+		
 		// display header of browser
 		System.out.println("\n");
 		System.out.println("============================================");
@@ -43,16 +42,65 @@ public class Client {
 		System.out.println("============================================ \n");
 		System.out.println("Please Insert The Web Address You Wish to Visit");
 	
+		
 		//Take in website from user
 		site = br.readLine();
 		
 		//test input
 		System.out.println("You entered "+ site);
+		
+		// call the server
+		client.server(site,80);
+		
+		
+	/*	
+		// create the client (Prof already gave us our PortNumber which is) 40450
+		Socket MyClient;
+	    MyClient = new Socket(site, PortNumber);
+			    
+		*/
+		
 	
 		
 		
 	}
 
+	// communicate with server	
+	public  void server (String site, int PortNumber) throws IOException{
+		// create the client (Prof already gave us our PortNumber which is) 40450
+		Socket MyClient;
+	    MyClient = new Socket(site, PortNumber);	
+	    
+	    // create streams to read and write from server
+	    //PrintStream out = new PrintStream( MyClient.getOutputStream() );
+	    PrintWriter out = new PrintWriter (MyClient.getOutputStream());
+        BufferedReader in = new BufferedReader( new InputStreamReader( MyClient.getInputStream() ) );
+		
+        //Outputs request from client to server in string to output
+        out.println("GET /about.html HTTP/1.1");
+        out.println("Host: " + site);
+        out.println("");
+        out.flush();	    
+		String outputStr;
+		
+		// print output of response
+		while((outputStr = in.readLine()) != null){
+            System.out.println(outputStr);
+        }
+		
+		// Close our streams
+        in.close();
+        out.close();
+        MyClient.close();
+		
+	}
+	
+
+	// communicate with DNS
+	public void dns (){
+		
+		
+	}
 	
 	
 	
