@@ -85,10 +85,14 @@ public class Client {
         BufferedReader in = new BufferedReader( new InputStreamReader( MyClient.getInputStream() ) );
 		
         //Outputs request from client to server in string to output
-        out.println("GET /about.html HTTP/1.1");
-        out.println("Host: " + site);
-        out.println("");
-        out.flush();	    
+       // out.println("GET /about.html HTTP/1.1");
+        //out.println("Host: " + site);
+        //out.println("");
+        //out.flush();	
+        
+        out.println( "GET " + site + " HTTP/1.1" );
+        out.println();
+        
 		String outputStr;
 		
 		// print output of response

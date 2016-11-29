@@ -56,7 +56,7 @@ public class HIS extends Thread {
 		
 		// recieve connection
 		Socket socket = serversocket.accept();	
-		
+		System.out.println("Just connected to " + socket.getRemoteSocketAddress());
 		// Send the request to a thread to proccess
 		multiRequest multirequest = new multiRequest(socket);
 		multirequest.start();
@@ -90,7 +90,7 @@ class multiRequest extends Thread{
         BufferedReader in = new BufferedReader( new InputStreamReader( socket.getInputStream()));
         
         //welcome user
-        out.println("Welcome to Client to www.hiscinema.com ");
+        out.println("Welcome to Server to www.hiscinema.com ");
         out.flush();
         
         
