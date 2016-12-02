@@ -9,8 +9,7 @@ import java.text.*;
 import java.net.*;
 
 // to make threading in here work we have to run it in parallel.
-// in other words we need to implement inter
-faces
+// in other words we need to implement interfaces
 public class HER  {
 	// need to implement TCP protocol
 
