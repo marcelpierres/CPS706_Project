@@ -30,7 +30,19 @@ class UDPServer
                   newClientSocket.receive(newReceivePacket);
                   String newModifiedSentence = new String(newReceivePacket.getData());
                   System.out.println("FROM SERVER:" + newModifiedSentence);
+                  System.out.println("The Port: " + newSendPacket.getPort());
                   newClientSocket.close();
+                  
+                  DatagramSocket herClientSocket = new DatagramSocket();
+                  
+                  DatagramPacket herSendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9878);
+                  herClientSocket.send(herSendPacket);
+                  DatagramPacket herReceivePacket = new DatagramPacket(receiveData, receiveData.length);
+                  herClientSocket.receive(herReceivePacket);
+                  String herModifiedSentence = new String(herReceivePacket.getData());
+                  System.out.println("FROM SERVER:" + herModifiedSentence);
+                  System.out.println("The Port: " + herSendPacket.getPort());
+                  herClientSocket.close();
                }
       }
 }
