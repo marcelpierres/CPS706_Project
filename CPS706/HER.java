@@ -37,7 +37,7 @@ public class HER extends Thread {
 		 serversocket = new ServerSocket(PortNumber);
 		this.start();
 		//State what port the server started on
-		System.out.println("Web server www.hiscinema.com started on port: "+ PortNumber);
+		System.out.println("Web server www.HERCDN.com started on port: "+ PortNumber);
 		
 		
 	}
@@ -95,7 +95,21 @@ class multiRun extends Thread{
         		//other way of readying and writing
         		InputStreamReader IR = new InputStreamReader(socket.getInputStream());
         		BufferedReader BR = new BufferedReader(IR);
+        		File file = new File("C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4");
+        	//=========================================================================	
         		
+        		byte[] mybytearray = new byte[(int) file.length()];
+
+                FileInputStream fis = new FileInputStream(file);
+
+        		
+           //==========================================================
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+                
+                
+                
+                
         		String msg  ;
         		
 
@@ -112,7 +126,15 @@ class multiRun extends Thread{
             			
         			}
         			
-        		
+        		// send
+        			
+        			bis.read(mybytearray, 0, mybytearray.length);
+                    bos.write(mybytearray, 0, mybytearray.length);
+                    bos.flush();
+                    bos.close();
+        			
+        			
+        			
         			
         //=======================================================================		
             //welcome user
@@ -130,8 +152,9 @@ class multiRun extends Thread{
                // line = in.readLine();
             //}
             
-            
-
+            //close new connection
+        			bos.close();
+        			bis.close();
         	// Close our connection
             IR.close(); //in
             BR.close(); //out
