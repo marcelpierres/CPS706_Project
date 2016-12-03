@@ -95,24 +95,36 @@ class multiRun extends Thread{
         		//other way of readying and writing
         		InputStreamReader IR = new InputStreamReader(socket.getInputStream());
         		BufferedReader BR = new BufferedReader(IR);
-        		File file = new File("C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4");
-        	//=========================================================================	
+        		//==============
+        		FileInputStream fl = null;
+        	    BufferedInputStream bl = null;
+        	    OutputStream ol = null;
+        	    
+        		//sending files
+        		String file = "C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4"; //file location
+        		// C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4
+        		//C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\Testfile.txt
+        		// create file
+        		File sendfile = new File(file);
         		
-        		byte[] mybytearray = new byte[(int) file.length()];
-
-                FileInputStream fis = new FileInputStream(file);
-
+        		byte [] fileseg  = new byte [(int)sendfile.length()]; // convert file into an array of bytes
         		
-           //==========================================================
-                BufferedInputStream bis = new BufferedInputStream(fis);
-                BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+        		fl = new FileInputStream(sendfile);
+        		
+                bl = new BufferedInputStream(fl);
                 
+                bl.read(fileseg,0,fileseg.length);
                 
+                ol = socket.getOutputStream();
                 
-                
+        		
+             // sending files      			
+    			ol.write(fileseg,0,fileseg.length);
+    			ol.flush();
+    			
+    			
         		String msg  ;
         		
-
         		// read a recieved message into variable
         			// if message is not empty
         			if ((msg= BR.readLine()) != null){
@@ -120,19 +132,12 @@ class multiRun extends Thread{
         				//create a stream to output to client
         			PrintStream PS = new PrintStream(socket.getOutputStream());	
         			// tell client message has been recieved
-        				PS.println("Message Recieved");
-        				PS.println("YOU FOUND ME!!!");
-        				PS.println("Take MY CONTENT!!!!.... YOU WON!!!");
+        			PS.println("Message Recieved");
+    				PS.println("YOU FOUND ME!!!");
+    				PS.println("Take MY CONTENT!!!!.... YOU WON!!!");
+    				
             			
         			}
-        			
-        		// send
-        			
-        			bis.read(mybytearray, 0, mybytearray.length);
-                    bos.write(mybytearray, 0, mybytearray.length);
-                    bos.flush();
-                    bos.close();
-        			
         			
         			
         			
@@ -152,16 +157,17 @@ class multiRun extends Thread{
                // line = in.readLine();
             //}
             
-            //close new connection
-        			bos.close();
-        			bis.close();
+            //file send close connection
+        			bl.close();
+        			ol.close();
+        			
         	// Close our connection
             IR.close(); //in
             BR.close(); //out
             socket.close();
             System.out.println( "www.HERCDN.com Closed Connection " );	
         	}
-    	// catch Input/output exception
+        	// catch Input/output exception
     	catch (IOException e){
     		e.printStackTrace();
     	}

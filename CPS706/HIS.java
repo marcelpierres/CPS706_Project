@@ -97,7 +97,7 @@ class multiRequest extends Thread{
     	    OutputStream ol = null;
     	    
     		//sending files
-    		String file = "C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4"; //file location
+    		String file = "C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\Testfile.txt"; //file location
     		// C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4
     		//C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\Testfile.txt
     		// create file
