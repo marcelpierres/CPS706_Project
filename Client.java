@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.text.*;
 import java.net.*;
+import java.nio.*;
 public class Client {
 	
 		// main
@@ -41,13 +42,14 @@ public class Client {
 		System.out.println("============================================");
 		System.out.println("           BROWSER Version 706");
 		System.out.println("============================================ \n");
-		System.out.println("Please Insert Your Port Address (Local server Port 40450)");
+		System.out.println("Please Insert Your Port Address (Local server Port 40450 or 1)");
 		
 		//take in portnumber from user
 		num = br.readLine();
 		
 		// convert string to integer
 		PortNumber = Integer.parseInt(num);
+		
 		
 		System.out.println("Please Insert The Web Address You Wish to Visit");
 			
@@ -60,6 +62,12 @@ public class Client {
 		// call the server
 		client.server(site,PortNumber);
 		
+		//call the DNS Server for location
+		PortNumber =client.dns();
+		
+		
+		// Call the Webserver to download
+		client.server2(site,PortNumber);
 		
 	/*	
 		// create the client (Prof already gave us our PortNumber which is) 40450
@@ -79,10 +87,25 @@ public class Client {
 		Socket MyClient;
 	    MyClient = new Socket(site, PortNumber);	
 	    
+	    //ability to recieve files
+	    int filesze = 214748364;
+	    String file = "c:/Users/marce/Desktop/Downloadedfile.txt"; 
+	    
+	    int bytesRead;
+	    int current = 0;
+	    FileOutputStream fl = null;
+	    BufferedOutputStream bl = null;
+	    
+	    
+	    byte [] mybytearray  = new byte [filesze];
+	      InputStream is = MyClient.getInputStream();
+	      fl = new FileOutputStream(file);
+	      bl = new BufferedOutputStream(fl);
+	      
 	    // create streams to read and write from server
 	    //PrintStream out = new PrintStream( MyClient.getOutputStream() );
-	    PrintWriter out = new PrintWriter (MyClient.getOutputStream());
-        BufferedReader in = new BufferedReader( new InputStreamReader( MyClient.getInputStream() ) );
+	    //PrintWriter out = new PrintWriter (MyClient.getOutputStream());
+        //BufferedReader in = new BufferedReader( new InputStreamReader( MyClient.getInputStream() ) );
 		
         //Outputs request from client to server in string to output
        // out.println("GET /about.html HTTP/1.1");
@@ -90,27 +113,181 @@ public class Client {
         //out.println("");
         //out.flush();	
         
-        out.println( "GET " + site + " HTTP/1.1" );
-        out.println();
+       // out.println( "GET " + site + " HTTP/1.1" );
+       // out.println("HI");
         
-		String outputStr;
+		//String outputStr;
 		
 		// print output of response
-		while((outputStr = in.readLine()) != null){
-            System.out.println(outputStr);
-        }
-		
+		//while((outputStr = in.readLine()) != null){
+           // System.out.println(outputStr);
+        //}
+//=========================================================================            
+            // Tell Server you have succefully connected
+	    PrintStream PS = new PrintStream(MyClient.getOutputStream());	//ability to send to server
+			PS.println("Successfully Connect to Server");
+            
+			InputStreamReader IR = new InputStreamReader(MyClient.getInputStream());
+    		BufferedReader BR = new BufferedReader(IR);
+    		BufferedReader user= new BufferedReader (new InputStreamReader(System.in));
+    		String msg;
+    		//==========================================
+    		bytesRead = is.read(mybytearray,0,mybytearray.length);
+    	      current = bytesRead;	   
+    	     //===================================================
+    	      
+    		
+    		
+    		//downloading
+    		do {
+    	         bytesRead =
+    	            is.read(mybytearray, current, (mybytearray.length-current));
+    	         if(bytesRead >= 0) current += bytesRead;
+    	      } while(bytesRead > -1);
+    		
+    		bl.write(mybytearray, 0 , current);
+    	      bl.flush();
+    	      System.out.println("File " + file
+    	          + " downloaded (" + current + " bytes read)");
+    		 
+    		//file send close connection
+			bl.close();
+			//fl.close();
+			
+			
+			//while output from server to client isnt empty
+    		while((msg = BR.readLine()) != null){
+    			//output the message
+    	           System.out.println(msg);
+    	                     
+    	        }
+    		
 		// Close our streams
-        in.close();
-        out.close();
+        IR.close();
+        BR.close();
         MyClient.close();
 		
 	}
+//=========================================================================================================
+	
+	// communicate with server	
+	public  void server2 (String site, int PortNumber) throws IOException, FileNotFoundException, InterruptedException{
+		// create the client (Prof already gave us our PortNumber which is) 40450
+		Socket MyClient;
+	    MyClient = new Socket(site, PortNumber);	
+	    
+	    //ability to recieve files
+	    int filesze = 214748364;
+	    String file = "c:/Users/marce/Desktop/Downloadedfile.mp4"; 
+	    
+	    int bytesRead;
+	    int current = 0;
+	    FileOutputStream fl = null;
+	    BufferedOutputStream bl = null;
+	    
+	    
+	    byte [] mybytearray  = new byte [filesze];
+	      InputStream is = MyClient.getInputStream();
+	      fl = new FileOutputStream(file);
+	      bl = new BufferedOutputStream(fl);
+	      
+	    // create streams to read and write from server
+	    //PrintStream out = new PrintStream( MyClient.getOutputStream() );
+	    //PrintWriter out = new PrintWriter (MyClient.getOutputStream());
+        //BufferedReader in = new BufferedReader( new InputStreamReader( MyClient.getInputStream() ) );
+		
+        //Outputs request from client to server in string to output
+       // out.println("GET /about.html HTTP/1.1");
+        //out.println("Host: " + site);
+        //out.println("");
+        //out.flush();	
+        
+       // out.println( "GET " + site + " HTTP/1.1" );
+       // out.println("HI");
+        
+		//String outputStr;
+		
+		// print output of response
+		//while((outputStr = in.readLine()) != null){
+           // System.out.println(outputStr);
+        //}
+//=========================================================================            
+            // Tell Server you have succefully connected
+	    PrintStream PS = new PrintStream(MyClient.getOutputStream());	//ability to send to server
+			PS.println("Successfully Connect to Server");
+            
+			InputStreamReader IR = new InputStreamReader(MyClient.getInputStream());
+    		BufferedReader BR = new BufferedReader(IR);
+    		BufferedReader user= new BufferedReader (new InputStreamReader(System.in));
+    		String msg;
+    		//==========================================
+    		bytesRead = is.read(mybytearray,0,mybytearray.length);
+    	      current = bytesRead;	   
+    	     //===================================================
+    	      
+    		
+    		
+    		//downloading
+    		do {
+    	         bytesRead =
+    	            is.read(mybytearray, current, (mybytearray.length-current));
+    	         if(bytesRead >= 0) current += bytesRead;
+    	      } while(bytesRead > -1);
+    		
+    		bl.write(mybytearray, 0 , current);
+    	      bl.flush();
+    	      System.out.println("File " + file
+    	          + " downloaded (" + current + " bytes read)");
+    		 
+    		//file send close connection
+			bl.close();
+			//fl.close();
+			
+			
+			//while output from server to client isnt empty
+    		while((msg = BR.readLine()) != null){
+    			//output the message
+    	           System.out.println(msg);
+    	                     
+    	        }
+    		
+		// Close our streams
+        IR.close();
+        BR.close();
+        MyClient.close();
+		
+		
+	}
+	
 	
 
-	// communicate with DNS
-	public void dns (){
+	// communicate with LDNS
+	public int dns () throws IOException,  NumberFormatException {
 		
+		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+		
+		DatagramSocket clientSocket = new DatagramSocket();
+		InetAddress IPAddress = InetAddress.getByName("localhost");
+		byte[] sendData = new byte[1024];
+		byte[] receiveData = new byte[1024];
+		String sentence = "Go here to find the the SERVER!!!!!!! HURRY!!!"; // 
+		sendData = sentence.getBytes();
+		DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 40450);
+		clientSocket.send(sendPacket);
+		
+		// create a data packet to recieve responce from local DNS server
+		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+		clientSocket.receive(receivePacket);
+		String response = new String(receivePacket.getData());
+		System.out.println("FROM SERVER:" + response);
+		//conver to integer
+		int finalans = 2;
+		
+		finalans=2;
+		clientSocket.close();
+
+		
+		return finalans;
 		
 	}
 	

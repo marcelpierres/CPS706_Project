@@ -10,12 +10,12 @@ import java.net.*;
 
 // to make threading in here work we have to run it in parallel.
 // in other words we need to implement inter
-faces
-public class HER  {
+
+public class HER extends Thread {
 	// need to implement TCP protocol
 
 	//class variables
-	private int PortNumber =40450;
+	private int PortNumber =2;
 	private ServerSocket serversocket;
 	private boolean work=false;
 	//main
@@ -37,7 +37,7 @@ public class HER  {
 		 serversocket = new ServerSocket(PortNumber);
 		this.start();
 		//State what port the server started on
-		System.out.println("Web server www.hiscinema.com started on port: "+ PortNumber);
+		System.out.println("Web server www.HERCDN.com started on port: "+ PortNumber);
 		
 		
 	}
@@ -90,31 +90,84 @@ class multiRun extends Thread{
 	public void run(){
     	try {
     		// get input and output to client
-    	PrintWriter out = new PrintWriter (socket.getOutputStream());
-        BufferedReader in = new BufferedReader( new InputStreamReader( socket.getInputStream()));
-        
-        //welcome user
-        out.println("Welcome to Server to www.hiscinema.com ");
-        out.flush();
-        
-        
-        String line = in.readLine();
-        while( line != null && line.length() > 0 )
-        {
-            out.println( "Echo: " + line );
-            out.flush();
-            line = in.readLine();
-        }
-        
-        
-
-    	// Close our connection
-        in.close();
-        out.close();
-        socket.close();
-        System.out.println( "www.hiscinema.com Closed Connection " );	
-    	}
-    	// catch Input/output exception
+        	//PrintWriter out = new PrintWriter (socket.getOutputStream());
+            //BufferedReader in = new BufferedReader( new InputStreamReader( socket.getInputStream()));
+        		//other way of readying and writing
+        		InputStreamReader IR = new InputStreamReader(socket.getInputStream());
+        		BufferedReader BR = new BufferedReader(IR);
+        		//==============
+        		FileInputStream fl = null;
+        	    BufferedInputStream bl = null;
+        	    OutputStream ol = null;
+        	    
+        		//sending files
+        		String file = "C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4"; //file location
+        		// C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\GoodMorning.mp4
+        		//C:\\Users\\marce\\workspace\\CPS706Ver3\\src\\CPS706\\Testfile.txt
+        		// create file
+        		File sendfile = new File(file);
+        		
+        		byte [] fileseg  = new byte [(int)sendfile.length()]; // convert file into an array of bytes
+        		
+        		fl = new FileInputStream(sendfile);
+        		
+                bl = new BufferedInputStream(fl);
+                
+                bl.read(fileseg,0,fileseg.length);
+                
+                ol = socket.getOutputStream();
+                
+        		
+             // sending files      			
+    			ol.write(fileseg,0,fileseg.length);
+    			ol.flush();
+    			
+    			
+        		String msg  ;
+        		
+        		// read a recieved message into variable
+        			// if message is not empty
+        			if ((msg= BR.readLine()) != null){
+        				System.out.println(msg); // output message on server terminal
+        				//create a stream to output to client
+        			PrintStream PS = new PrintStream(socket.getOutputStream());	
+        			// tell client message has been recieved
+        			PS.println("Message Recieved");
+    				PS.println("YOU FOUND ME!!!");
+    				PS.println("Take MY CONTENT!!!!.... YOU WON!!!");
+    				
+            			
+        			}
+        			
+        			
+        			
+        //=======================================================================		
+            //welcome user
+        	//out.println("Welcome to Server to www.hiscinema.com "+  socket.getRemoteSocketAddress());
+            //out.flush();
+            
+            
+           // String line = in.readLine();
+            //System.out.println(line);
+            
+            //while( line != null && line.length() > 0 )
+            //{
+              //  out.println( "Message Recieved" );
+                //out.flush();
+               // line = in.readLine();
+            //}
+            
+            //file send close connection
+        			bl.close();
+        			ol.close();
+        			
+        	// Close our connection
+            IR.close(); //in
+            BR.close(); //out
+            socket.close();
+            System.out.println( "www.HERCDN.com Closed Connection " );	
+        	}
+        	// catch Input/output exception
     	catch (IOException e){
     		e.printStackTrace();
     	}
