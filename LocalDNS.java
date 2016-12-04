@@ -12,19 +12,17 @@ public class LocalDNS {
           byte[] sendData = new byte[1024];
           while(true)
              {
-        	  //recived  packet from CLient and saved port and IP address
+        	  //received  packet from CLient and saved port and IP address
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 serverSocket.receive(receivePacket);
                 String sentence = new String( receivePacket.getData());
                 System.out.println("RECEIVED: " + sentence);
                 InetAddress IPAddress = receivePacket.getAddress(); // saved sender IP
                 int port = receivePacket.getPort();// saved sender port
+
                 
-               
-                
-                
-                //find out where to go from the recieved pakcet... thank god
-                // takes info recieved from client and asks HISCinemaDNS(which is specified in the recieved content sent to the client from HIScenemaWeBServer)
+                //find out where to go from the received packet... thank god
+                // takes info received from client and asks HISCinemaDNS(which is specified in the received content sent to the client from HIScenemaWeBServer)
                 DatagramSocket newClientSocket = new DatagramSocket(); // creates new UDP socket
                 String search = "Hey is this HisCinema? Im looking for HerCDN... Do you know where it is?"; // 
         		
@@ -33,11 +31,11 @@ public class LocalDNS {
                 DatagramPacket newSendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9877); //creates new UDP packet
                 newClientSocket.send(newSendPacket); // sends new packet
                 
-                //recieve data from the server about where to go next
-                DatagramPacket newReceivePacket = new DatagramPacket(receiveData, receiveData.length); // creates a recieve packet
-                newClientSocket.receive(newReceivePacket); //recieves incoming packet
+                //receive data from the server about where to go next
+                DatagramPacket newReceivePacket = new DatagramPacket(receiveData, receiveData.length); // creates a receive packet
+                newClientSocket.receive(newReceivePacket); //receives incoming packet
                 String newModifiedSentence = new String(newReceivePacket.getData()); // turns byte packet to string
-                System.out.println("FROM SERVER:" + newModifiedSentence); // reads out message recieved oh where to go...
+                System.out.println("FROM SERVER:" + newModifiedSentence); // reads out message received oh where to go...
                 System.out.println("The Port: " + newSendPacket.getPort()); // as well as port number from the one who sent it...
                 newClientSocket.close(); // close this socket
                 
