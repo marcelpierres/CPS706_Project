@@ -1,0 +1,48 @@
+# CPS706_Project
+Implementing a Content Distribution Server
+Description of Source Code:
+
+Client.java
+- Communicates with the Local DNS
+- Obtains port number and the web address to be visited
+- Takes in the input and calls the server and collects the DNS server for location and then the webserver for the download
+LocalDNS.java
+- Client requests something
+- Communicates with the HisCinemaDNS to obtain the information to find out where to go
+- Sends a packet to HerCDNDNS and then responds to the client
+HIS.java
+- Runs the server
+- Has thread to handle multiple requests
+- Reads received messages
+- Can send files
+- Closes connection
+HisCinemaDNS.java
+- Receives packet and reads it
+- Returns response to sender 
+HER.java
+- Runs the server
+- Contains thread
+- Reads received messages
+- Can send files
+- Closes connection
+HerCDNDNS.java
+- Receives packet and reads it
+- Returns response to sender 
+
+Compiling Instructions:
+
+On 4 separate computers, run the commands (Each number being a different computer):
+1. javac Client.java
+java Client
+2. javac LocalDNS.java
+java LocalDNS
+3. javac HIS.java HisCinemaDNS.java
+java HIS HisCinemaDNS
+4. javac HER.Java HerCDNDNS.java
+java Her HerCDNDNS
+
+On the computer running the Client
+Enter:
+- The port:40450
+- The IP address
+- Number of the file you want
